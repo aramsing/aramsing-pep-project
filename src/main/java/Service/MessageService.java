@@ -1,5 +1,5 @@
 package Service;
-
+import java.util.*;
 import DAO.MessageDAO;
 import Model.Message;
 
@@ -12,5 +12,29 @@ public class MessageService {
     
     public MessageService(MessageDAO messageDAO) {
         this.messageDAO = messageDAO;
+    }
+
+    public List<Message> getAllMessages() {
+        return messageDAO.getAllMessages();
+    }
+
+    public Message addMessage(Message message) {
+        Message existingMessage = messageDAO.insertMessage(message);
+        if (existingMessage != null) {
+            return null;
+        }
+        messageDAO.insertMessage(message);
+        return message;
+    }
+
+    public Message updateMessage(int message_id, Message message) {
+        Message existingMessage = messageDAO.getMessageByID(message_id);
+        if (existingMessage == null) {
+            return null;
+        }
+        existingMessage.setMessage_text(message.getMessage_text());
+        existingMessage.setTime_posted_epoch(message.getTime_posted_epoch());
+
+        return existingMessage;
     }
 }

@@ -14,6 +14,10 @@ public class AccountService {
         this.accountDAO = accountDAO;
     }
 
+    public Account logInAccount(Account account) {
+        return accountDAO.logInAccount(account);
+    }
+
     public Account addAccount(Account account) {
         return accountDAO.insertAccount(account);
     }

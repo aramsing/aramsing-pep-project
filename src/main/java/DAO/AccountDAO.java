@@ -1,6 +1,7 @@
 package DAO;
 
 import Model.Account;
+
 import java.sql.*;
 import Util.ConnectionUtil;
 
@@ -16,6 +17,38 @@ import Util.ConnectionUtil;
  * );
  */
 public class AccountDAO {
+    /*
+     * TODO: Select an account from the account table
+     * Log in to an account in our demo social media
+     */
+    public Account logInAccount(Account account) {
+        Connection connection = ConnectionUtil.getConnection(); // creates a connection to the database
+
+        try {
+            String sql = "SELECT * FROM account WHERE (username = ?) AND (password = ?);"; // get the username and password for the account
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // set string method, the user input starts at index 1 instead of 0
+            preparedStatement.setString(1, account.getUsername());
+            preparedStatement.setString(2, account.getPassword());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            
+            while(resultSet.next()) {
+                Account accounts = new Account(
+                    resultSet.getInt("account_id"),
+                    resultSet.getString("username"),
+                    resultSet.getString("password")
+                );
+                return accounts;
+            }
+        }
+        
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     /*
      * TODO: Insert an account into the account table
      * Create an account in our demo social media
