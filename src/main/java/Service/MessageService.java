@@ -38,8 +38,8 @@ public class MessageService {
         return existingMessage;
     }
 
-    public List<Message> getAllMessageByAccountID(Message message) {
-        return messageDAO.getAllMessageByAccountID(message.posted_by);
+    public List<Message> getAllMessageByAccountID(int posted_by) {
+        return messageDAO.getAllMessageByAccountID(posted_by);
     }
 
     public Message getMessageByID(int message_id) {

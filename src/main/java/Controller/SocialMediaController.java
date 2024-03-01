@@ -9,16 +9,20 @@ import java.util.List;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
- * found in readme.md as well as the test cases. You should
- * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
+ * found in readme.md as well as the test cases.
+ * You should refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
  */
 public class SocialMediaController {
     AccountService accountService;
+    Account account;
     MessageService messageService;
+    Message message;
 
     public SocialMediaController() {
         this.accountService = new AccountService();
+        this.account = new Account();
         this.messageService = new MessageService();
+        this.message = new Message();
     }
 
     /**
@@ -45,7 +49,8 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void getAllMessagesHandler(Context context) {
-        context.json(messageService.getAllMessages());
+        List<Message> messages = messageService.getAllMessages();
+        context.json(messages);
         context.status(200);
     }
 
@@ -119,7 +124,9 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void getIndividualMessageHandler(Context context) throws JsonProcessingException {
-        context.json(messageService.getMessageByID(context.pathParam("message_id")));
+        Message messages = messageService.getMessageByID(message.getMessage_id());
+        context.json(messages);
+        context.status(200);
     }
 
     /**
@@ -127,6 +134,8 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void getAllMessagesFromAnAccount(Context context) throws JsonProcessingException {
-        context.json(messageService.getAllMessageByAccountID(context.pathParam("posted_by")));
+        List<Message> messages = messageService.getAllMessageByAccountID(message.posted_by);
+        context.json(messages);
+        context.status(200);
     }
 }
