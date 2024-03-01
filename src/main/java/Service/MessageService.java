@@ -37,4 +37,12 @@ public class MessageService {
 
         return existingMessage;
     }
+
+    public List<Message> getAllMessageByAccountID(Message message) {
+        return messageDAO.getAllMessageByAccountID(message.posted_by);
+    }
+
+    public Message getMessageByID(int message_id) {
+        return messageDAO.getMessageByID(message_id);
+    }
 }

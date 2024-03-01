@@ -28,9 +28,14 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.get("/message", this::getAllMessagesHandler);
-        app.post("/message", this::postAddMessageHandler);
-        app.put("/message{message_id}", this::updateMessageHandler);
+        app.post("/register", this::postRegisterHandler);
+        app.post("/login", this::postLogInHandler);
+        app.get("/messages", this::getAllMessagesHandler);
+        app.post("/messages", this::postAddMessageHandler);
+        app.patch("/messages/{message_id}", this::updateMessageHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageHandler);
+        app.get("/messages/{message_id}", this::getIndividualMessageHandler);
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesFromAnAccount);
         app.start(8080);
         return app;
     }
@@ -40,8 +45,8 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void getAllMessagesHandler(Context context) {
-        List<Message> messages = messageService.getAllMessages();
-        context.json(messages);
+        context.json(messageService.getAllMessages());
+        context.status(200);
     }
 
     /**
@@ -54,23 +59,74 @@ public class SocialMediaController {
         Message addedMessage = messageService.addMessage(message);
         if (addedMessage!=null) {
             context.json(mapper.writeValueAsString(addedMessage));
+            context.status(200);
         }
         else {
             context.status(400);
         }
     }
 
+    /**
+     * This is an example handler for an example endpoint.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
     private void updateMessageHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
         int message_id = Integer.parseInt(context.pathParam("message_id"));
         Message updatedMessage = messageService.updateMessage(message_id, message);
         System.out.println(updatedMessage);
-        if (updatedMessage == null) {
-            context.status(400);
+        if (updatedMessage != null) {
+            context.json(mapper.writeValueAsString(updatedMessage));
+            context.status(200);
         }
         else {
-            context.json(mapper.writeValueAsString(updatedMessage));
+            context.status(400);
         }
+    }
+
+    /**
+     * This is an example handler for an example endpoint.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void postRegisterHandler(Context context) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(context.body(), Account.class);
+        Account addedAccount = accountService.addAccount(account);
+        if(addedAccount != null) {
+            context.json(mapper.writeValueAsString(addedAccount));
+            context.status(200);
+        }
+        else {
+            context.status(400);
+        }
+    }
+
+    /**
+     * This is an example handler for an example endpoint.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void postLogInHandler(Context context) throws JsonProcessingException {}
+
+    /**
+     * This is an example handler for an example endpoint.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void deleteMessageHandler(Context context) throws JsonProcessingException {}
+
+    /**
+     * This is an example handler for an example endpoint.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void getIndividualMessageHandler(Context context) throws JsonProcessingException {
+        context.json(messageService.getMessageByID(context.pathParam("message_id")));
+    }
+
+    /**
+     * This is an example handler for an example endpoint.
+     * @param context The Javalin Context object manages information about both the HTTP request and response.
+     */
+    private void getAllMessagesFromAnAccount(Context context) throws JsonProcessingException {
+        context.json(messageService.getAllMessageByAccountID(context.pathParam("posted_by")));
     }
 }

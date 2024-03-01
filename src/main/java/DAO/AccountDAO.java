@@ -46,6 +46,7 @@ public class AccountDAO {
         catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
         return null;
     }
 
@@ -58,7 +59,7 @@ public class AccountDAO {
 
         try {
             // SQL logic
-            String sql = "INSERT INTO (username, password) VALUES (?, ?);"; // since the account_id is auto incrementing, we only need to create a user name and password
+            String sql = "INSERT INTO account (username, password) VALUES (?, ?);"; // since the account_id is auto incrementing, we only need to create a username and password
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // set string method, the user input starts at index 1 instead of 0
