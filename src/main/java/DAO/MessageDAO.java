@@ -175,21 +175,25 @@ public class MessageDAO {
     /*
      * Delete a message here
      */
-    public void deleteMessage(int message_id) {
+    public boolean deleteMessage(int message_id) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
-            // SQL logic
+            // SQL logic goes here
             String sql = "DELETE FROM message WHERE message_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // prepared statement logic
             preparedStatement.setInt(1, message_id);
-            preparedStatement.executeUpdate();
+
+            int affectedRows = preparedStatement.executeUpdate();
+
+            return affectedRows > 0;
         }
-        
+
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
+            return false;
         }
     }
 }

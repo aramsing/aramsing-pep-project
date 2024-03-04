@@ -1,4 +1,5 @@
 package Service;
+
 import java.util.*;
 import DAO.MessageDAO;
 import Model.Message;
@@ -7,7 +8,7 @@ public class MessageService {
     public MessageDAO messageDAO;
 
     public MessageService() {
-        messageDAO = new MessageDAO();
+        this.messageDAO = new MessageDAO();
     }
     
     public MessageService(MessageDAO messageDAO) {
@@ -19,23 +20,29 @@ public class MessageService {
     }
 
     public Message addMessage(Message message) {
-        Message existingMessage = messageDAO.insertMessage(message);
-        if (existingMessage != null) {
+        try {
+            Message existingMessage = messageDAO.insertMessage(message);
+            if (existingMessage != null) {
+                return null;
+            }
+            return message;
+        } catch (Exception e) {
             return null;
         }
-        messageDAO.insertMessage(message);
-        return message;
     }
 
     public Message updateMessage(int message_id, Message message) {
-        Message existingMessage = messageDAO.getMessageByID(message_id);
-        if (existingMessage == null) {
+        try {
+            Message existingMessage = messageDAO.getMessageByID(message_id);
+            if (existingMessage == null) {
+                return null;
+            }
+            existingMessage.setMessage_text(message.getMessage_text());
+            existingMessage.setTime_posted_epoch(message.getTime_posted_epoch());
+            return existingMessage;
+        } catch (Exception e) {
             return null;
         }
-        existingMessage.setMessage_text(message.getMessage_text());
-        existingMessage.setTime_posted_epoch(message.getTime_posted_epoch());
-
-        return existingMessage;
     }
 
     public List<Message> getAllMessageByAccountID(int posted_by) {
@@ -47,10 +54,15 @@ public class MessageService {
     }
 
     public Message deleteMessageByID(int message_id) {
-        Message existingMessage = messageDAO.getMessageByID(message_id);
-        if(existingMessage == null) {
+        try {
+            Message existingMessage = messageDAO.getMessageByID(message_id);
+            if(existingMessage == null) {
+                return null;
+            }
+            messageDAO.deleteMessage(message_id);
+            return existingMessage;
+        } catch (Exception e) {
             return null;
         }
-        return existingMessage;
     }
 }

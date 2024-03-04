@@ -1,7 +1,6 @@
 package DAO;
 
 import Model.Account;
-
 import java.sql.*;
 import Util.ConnectionUtil;
 
@@ -35,6 +34,7 @@ public class AccountDAO {
             
             while(resultSet.next()) {
                 Account accounts = new Account(
+                    resultSet.getInt("account_id"),
                     resultSet.getString("username"),
                     resultSet.getString("password")
                 );
@@ -43,7 +43,7 @@ public class AccountDAO {
         }
         
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return null;
@@ -70,13 +70,13 @@ public class AccountDAO {
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
             if (resultSet.next()) {
-                int generatedAccountId = (int) resultSet.getLong(1);
+                int generatedAccountId = resultSet.getInt(1);
                 return new Account(generatedAccountId, account.getUsername(), account.getPassword());
             }
         }
 
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return null;

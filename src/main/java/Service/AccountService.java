@@ -7,7 +7,7 @@ public class AccountService {
     private AccountDAO accountDAO;
 
     public AccountService() {
-        accountDAO = new AccountDAO();
+        this.accountDAO = new AccountDAO();
     }
 
     public AccountService(AccountDAO accountDAO) {
@@ -15,10 +15,20 @@ public class AccountService {
     }
 
     public Account logInAccount(Account account) {
-        return accountDAO.logInAccount(account);
+        try {
+            return accountDAO.logInAccount(account);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 
     public Account addAccount(Account account) {
-        return accountDAO.insertAccount(account);
+        try {
+            return accountDAO.insertAccount(account);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
 }
