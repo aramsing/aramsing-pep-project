@@ -45,4 +45,12 @@ public class MessageService {
     public Message getMessageByID(int message_id) {
         return messageDAO.getMessageByID(message_id);
     }
+
+    public Message deleteMessageByID(int message_id) {
+        Message existingMessage = messageDAO.getMessageByID(message_id);
+        if(existingMessage == null) {
+            return null;
+        }
+        return existingMessage;
+    }
 }

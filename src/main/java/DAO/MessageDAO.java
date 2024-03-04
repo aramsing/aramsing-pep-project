@@ -20,7 +20,7 @@ import Util.ConnectionUtil;
  */
 public class MessageDAO {
     /*
-     * TODO: Retrieve all messages from the message table
+     * Retrieve all messages from the message table
      */
     public List<Message> getAllMessages() {
         Connection connection = ConnectionUtil.getConnection();
@@ -51,7 +51,7 @@ public class MessageDAO {
     }
 
     /*
-     * TODO: Retrieve an individual message by its id
+     * Retrieve an individual message by its id
      */
     public Message getMessageByID(int message_id) {
         Connection connection = ConnectionUtil.getConnection();
@@ -85,7 +85,7 @@ public class MessageDAO {
     }
 
     /*
-     * TODO: Get all messages by account id
+     * Get all messages by account id
      */
     public List<Message> getAllMessageByAccountID(int posted_by) {
         Connection connection = ConnectionUtil.getConnection();
@@ -118,24 +118,27 @@ public class MessageDAO {
     }
 
     /*
-     * TODO: Create a new message here
+     * Create a new message here
      */
     public Message insertMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
             // SQL logic
-            String sql = "INSERT INTO message (message_id, posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?, ?);";
+            String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?);";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // prepared statement logic
-            preparedStatement.setInt(1, message.getMessage_id());
-            preparedStatement.setInt(2, message.getPosted_by());
-            preparedStatement.setString(3, message.getMessage_text());
-            preparedStatement.setLong(4, message.getTime_posted_epoch());
+            preparedStatement.setInt(1, message.getPosted_by());
+            preparedStatement.setString(2, message.getMessage_text());
+            preparedStatement.setLong(3, message.getTime_posted_epoch());
 
-            preparedStatement.executeQuery();
-            return message;
+            preparedStatement.executeUpdate();
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
+                int generatedMessageID = (int) resultSet.getLong(1);
+                return new Message(generatedMessageID, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
+            }
         }
         
         catch (SQLException e) {
@@ -146,7 +149,7 @@ public class MessageDAO {
     }
 
     /*
-     * TODO: Update a message here
+     * Update a message here
      */
     public void updateMessage(int message_id, Message message) {
         Connection connection = ConnectionUtil.getConnection();
@@ -159,9 +162,30 @@ public class MessageDAO {
             // prepared statement logic
             preparedStatement.setString(1, message.getMessage_text());
             preparedStatement.setLong(2, message.getTime_posted_epoch());
-            preparedStatement.setInt(3, message.getMessage_id());
+            preparedStatement.setInt(3, message_id);
 
             preparedStatement.executeQuery();
+        }
+        
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /*
+     * Delete a message here
+     */
+    public void deleteMessage(int message_id) {
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            // SQL logic
+            String sql = "DELETE FROM message WHERE message_id = ?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            // prepared statement logic
+            preparedStatement.setInt(1, message_id);
+            preparedStatement.executeUpdate();
         }
         
         catch (SQLException e) {

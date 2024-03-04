@@ -18,14 +18,14 @@ import Util.ConnectionUtil;
  */
 public class AccountDAO {
     /*
-     * TODO: Select an account from the account table
+     * Select an account from the account table
      * Log in to an account in our demo social media
      */
     public Account logInAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection(); // creates a connection to the database
 
         try {
-            String sql = "SELECT * FROM account WHERE (username = ?) AND (password = ?);"; // get the username and password for the account
+            String sql = "SELECT * FROM account WHERE username = ? AND password = ?;"; // get the username and password for the account
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // set string method, the user input starts at index 1 instead of 0
@@ -35,7 +35,6 @@ public class AccountDAO {
             
             while(resultSet.next()) {
                 Account accounts = new Account(
-                    resultSet.getInt("account_id"),
                     resultSet.getString("username"),
                     resultSet.getString("password")
                 );
@@ -51,7 +50,7 @@ public class AccountDAO {
     }
 
     /*
-     * TODO: Insert an account into the account table
+     * Insert an account into the account table
      * Create an account in our demo social media
      */
     public Account insertAccount(Account account) {
