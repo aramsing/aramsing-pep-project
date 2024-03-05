@@ -49,7 +49,7 @@ public class SocialMediaController {
      * This is an example handler for an example endpoint.
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
-    private void getAllMessagesHandler(Context context) {
+    private void getAllMessagesHandler(Context context) throws JsonProcessingException {
         try {
             List<Message> messages = messageService.getAllMessages();
             context.status(200).json(messages);
@@ -67,7 +67,7 @@ public class SocialMediaController {
             ObjectMapper mapper = new ObjectMapper();
             Message message = mapper.readValue(context.body(), Message.class);
             Message addedMessage = messageService.addMessage(message);
-            if (addedMessage!=null) {
+            if (addedMessage != null) {
                 context.status(201).json(addedMessage);
             }
             else {

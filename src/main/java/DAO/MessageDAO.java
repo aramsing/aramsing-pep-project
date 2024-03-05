@@ -151,7 +151,7 @@ public class MessageDAO {
     /*
      * Update a message here
      */
-    public void updateMessage(int message_id, Message message) {
+    public boolean updateMessage(int message_id, Message message) throws Exception {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -164,18 +164,25 @@ public class MessageDAO {
             preparedStatement.setLong(2, message.getTime_posted_epoch());
             preparedStatement.setInt(3, message_id);
 
-            preparedStatement.executeQuery();
+            int affectedRow = preparedStatement.executeUpdate();
+
+            if (affectedRow == 0) {
+                throw new Exception("Message does not exist in the database");
+            }
+
+            return true;
         }
         
         catch (SQLException e) {
             System.out.println(e.getMessage());
+            return false;
         }
     }
 
     /*
      * Delete a message here
      */
-    public boolean deleteMessage(int message_id) {
+    public boolean deleteMessage(int message_id) throws Exception {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -188,7 +195,11 @@ public class MessageDAO {
 
             int affectedRows = preparedStatement.executeUpdate();
 
-            return affectedRows > 0;
+            if (affectedRows == 0) {
+                throw new Exception("Message does not exist in database");
+            }
+
+            return true;
         }
 
         catch (SQLException e) {
