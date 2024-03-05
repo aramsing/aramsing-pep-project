@@ -8,7 +8,7 @@ public class MessageService {
     public MessageDAO messageDAO;
 
     public MessageService() {
-        this.messageDAO = new MessageDAO();
+        messageDAO = new MessageDAO();
     }
     
     public MessageService(MessageDAO messageDAO) {
@@ -20,29 +20,19 @@ public class MessageService {
     }
 
     public Message addMessage(Message message) {
-        try {
-            Message existingMessage = messageDAO.insertMessage(message);
-            if (existingMessage != null) {
-                return null;
-            }
-            return message;
-        } catch (Exception e) {
+        if ((message.getMessage_text() == "") || (message.getMessage_text().length() > 255)) {
             return null;
         }
+        return messageDAO.insertMessage(message);
     }
 
     public Message updateMessage(int message_id, Message message) {
-        try {
-            Message existingMessage = messageDAO.getMessageByID(message_id);
-            if (existingMessage == null) {
-                return null;
-            }
-            existingMessage.setMessage_text(message.getMessage_text());
-            existingMessage.setTime_posted_epoch(message.getTime_posted_epoch());
-            return existingMessage;
-        } catch (Exception e) {
+        Message existingMessage = messageDAO.getMessageByID(message_id);
+        if ((message == null) || (message.getMessage_text() == "") || (message.getMessage_text().length() > 255)) {
             return null;
         }
+        existingMessage.setMessage_text(message.getMessage_text());
+        return existingMessage;
     }
 
     public List<Message> getAllMessageByAccountID(int posted_by) {
@@ -53,16 +43,10 @@ public class MessageService {
         return messageDAO.getMessageByID(message_id);
     }
 
-    public Message deleteMessageByID(int message_id) {
-        try {
-            Message existingMessage = messageDAO.getMessageByID(message_id);
-            if(existingMessage == null) {
-                return null;
-            }
-            messageDAO.deleteMessage(message_id);
-            return existingMessage;
-        } catch (Exception e) {
-            return null;
-        }
+    public Message deleteMessageByID(Message message) throws Exception {
+        Message deletedMessage = new Message();
+        deletedMessage = messageDAO.getMessageByID(message.getMessage_id());
+        messageDAO.deleteMessage(message.getMessage_id());
+        return deletedMessage;
     }
 }

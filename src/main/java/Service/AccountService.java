@@ -7,7 +7,7 @@ public class AccountService {
     private AccountDAO accountDAO;
 
     public AccountService() {
-        this.accountDAO = new AccountDAO();
+        accountDAO = new AccountDAO();
     }
 
     public AccountService(AccountDAO accountDAO) {

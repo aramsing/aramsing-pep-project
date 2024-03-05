@@ -126,7 +126,7 @@ public class MessageDAO {
         try {
             // SQL logic
             String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             // prepared statement logic
             preparedStatement.setInt(1, message.getPosted_by());
@@ -151,7 +151,7 @@ public class MessageDAO {
     /*
      * Update a message here
      */
-    public boolean updateMessage(int message_id, Message message) throws Exception {
+    public void updateMessage(int message_id, Message message) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -164,25 +164,18 @@ public class MessageDAO {
             preparedStatement.setLong(2, message.getTime_posted_epoch());
             preparedStatement.setInt(3, message_id);
 
-            int affectedRow = preparedStatement.executeUpdate();
-
-            if (affectedRow == 0) {
-                throw new Exception("Message does not exist in the database");
-            }
-
-            return true;
+            preparedStatement.executeUpdate();
         }
         
         catch (SQLException e) {
             System.out.println(e.getMessage());
-            return false;
         }
     }
 
     /*
      * Delete a message here
      */
-    public boolean deleteMessage(int message_id) throws Exception {
+    public void deleteMessage(int message_id) throws Exception {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -198,13 +191,10 @@ public class MessageDAO {
             if (affectedRows == 0) {
                 throw new Exception("Message does not exist in database");
             }
-
-            return true;
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
-            return false;
         }
     }
 }
