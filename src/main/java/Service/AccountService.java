@@ -15,20 +15,13 @@ public class AccountService {
     }
 
     public Account logInAccount(Account account) {
-        try {
-            return accountDAO.logInAccount(account);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
+        return accountDAO.logInAccount(account);
     }
 
     public Account addAccount(Account account) {
-        try {
-            return accountDAO.insertAccount(account);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+        if ((account.getUsername() == "") || (account.getPassword().length() < 4)) {
             return null;
         }
+        return accountDAO.insertAccount(account);
     }
 }

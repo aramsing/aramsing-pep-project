@@ -28,7 +28,7 @@ public class MessageService {
 
     public Message updateMessage(int message_id, Message message) {
         Message existingMessage = messageDAO.getMessageByID(message_id);
-        if ((message == null) || (message.getMessage_text() == "") || (message.getMessage_text().length() > 255)) {
+        if ((message == null) || (message.getMessage_text() == "") || (message.getMessage_text().length() > 255) || (existingMessage == null)) {
             return null;
         }
         existingMessage.setMessage_text(message.getMessage_text());
@@ -43,10 +43,11 @@ public class MessageService {
         return messageDAO.getMessageByID(message_id);
     }
 
-    public Message deleteMessageByID(Message message) throws Exception {
-        Message deletedMessage = new Message();
-        deletedMessage = messageDAO.getMessageByID(message.getMessage_id());
-        messageDAO.deleteMessage(message.getMessage_id());
+    public Message deleteMessageByID(int message_id) {
+        Message deletedMessage = messageDAO.getMessageByID(message_id);
+        if (deletedMessage.toString() == "") {
+            return null;
+        }
         return deletedMessage;
     }
 }

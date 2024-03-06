@@ -175,7 +175,7 @@ public class MessageDAO {
     /*
      * Delete a message here
      */
-    public void deleteMessage(int message_id) throws Exception {
+    public void deleteMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -184,13 +184,9 @@ public class MessageDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // prepared statement logic
-            preparedStatement.setInt(1, message_id);
+            preparedStatement.setInt(1, message.getMessage_id());
 
-            int affectedRows = preparedStatement.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new Exception("Message does not exist in database");
-            }
+            preparedStatement.executeUpdate();
         }
 
         catch (SQLException e) {
