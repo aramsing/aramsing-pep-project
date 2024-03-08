@@ -26,12 +26,11 @@ public class MessageService {
         return messageDAO.insertMessage(message);
     }
 
-    public Message updateMessage(int message_id, Message message) {
-        Message existingMessage = messageDAO.getMessageByID(message_id);
-        if ((message == null) || (message.getMessage_text() == "") || (message.getMessage_text().length() > 255) || (existingMessage == null)) {
-            return null;
+    public boolean updateMessage(Message message) {
+        boolean existingMessage = messageDAO.updateMessage(message);
+        if ((existingMessage == false) || (message.getMessage_text().isEmpty()) || (message.getMessage_text().length() > 255)) {
+            return false;
         }
-        existingMessage.setMessage_text(message.getMessage_text());
         return existingMessage;
     }
 
@@ -43,11 +42,13 @@ public class MessageService {
         return messageDAO.getMessageByID(message_id);
     }
 
-    public Message deleteMessageByID(int message_id) {
-        Message deletedMessage = messageDAO.getMessageByID(message_id);
-        if (deletedMessage.toString() == "") {
-            return null;
+    public boolean deleteMessageByID(Message message) {
+        boolean deletedMessage = messageDAO.deleteMessage(message);
+        if (deletedMessage == false) {
+            return false;
         }
-        return deletedMessage;
+        else {
+            return true;
+        }
     }
 }

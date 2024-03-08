@@ -76,10 +76,8 @@ public class SocialMediaController {
     private void patchUpdateMessageHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
-        int message_id = Integer.parseInt(context.pathParam("message_id"));
-        Message updatedMessage = messageService.updateMessage(message_id, message);
-        if (updatedMessage != null) {
-            context.status(200).json(updatedMessage);
+        if (messageService.updateMessage(message)) {
+            context.status(200).json(message);
         }
         else {
             context.status(400);
@@ -125,12 +123,11 @@ public class SocialMediaController {
     private void deleteMessageHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
-        Message deletedMessage = messageService.deleteMessageByID(message.getMessage_id());
-        if (deletedMessage == null) {
+        if (messageService.deleteMessageByID(message)) {
             context.status(200);
         }
         else {
-            context.status(200).json(deletedMessage);
+            context.status(200).json(message);
         }
     }
 
