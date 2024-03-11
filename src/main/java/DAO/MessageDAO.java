@@ -151,60 +151,45 @@ public class MessageDAO {
     /*
      * Update a message here
      */
-    public boolean updateMessage(Message message) {
+    public void updateMessage(int message_id, Message message) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
             // SQL logic
-            String sql = "UPDATE message SET message_text = ?, time_posted_epoch = ? WHERE message_id = ?;";
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // prepared statement logic
             preparedStatement.setString(1, message.getMessage_text());
-            preparedStatement.setLong(2, message.getTime_posted_epoch());
-            preparedStatement.setInt(3, message.getMessage_id());
+            preparedStatement.setInt(2, message_id);
 
-            int checkUpdate = preparedStatement.executeUpdate();
-
-            if (checkUpdate == 0) {
-                return false;
-            }
-
-            return true;
+            preparedStatement.executeUpdate();
         }
         
         catch (SQLException e) {
             System.err.println(e.getMessage());
-            return false;
         }
     }
 
     /*
      * Delete a message here
      */
-    public boolean deleteMessage(Message message) {
+    public void deleteMessage(int message_id) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
-            // SQL logic goes here
+            // SQL logic
             String sql = "DELETE FROM message WHERE message_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             // prepared statement logic
-            preparedStatement.setInt(1, message.getMessage_id());
+            preparedStatement.setInt(1, message_id);
 
-            int checkDelete = preparedStatement.executeUpdate();
-
-            if (checkDelete == 0) {
-                return false;
-            }
-
-            return true;
+            preparedStatement.executeUpdate();
         }
 
         catch (SQLException e) {
             System.err.println(e.getMessage());
-            return false;
         }
     }
 }

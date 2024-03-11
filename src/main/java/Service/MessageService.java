@@ -26,12 +26,13 @@ public class MessageService {
         return messageDAO.insertMessage(message);
     }
 
-    public boolean updateMessage(Message message) {
-        boolean existingMessage = messageDAO.updateMessage(message);
-        if ((existingMessage == false) || (message.getMessage_text().isEmpty()) || (message.getMessage_text().length() > 255)) {
-            return false;
+    public Message updateMessageByID(int message_id, Message message) {
+        Message existingMessage = messageDAO.getMessageByID(message_id);
+        if ((existingMessage == null) || (message.getMessage_text() == "") || (message.getMessage_text().length() > 255) || (message == null)) {
+            return null;
         }
-        return existingMessage;
+        messageDAO.updateMessage(message_id, message);
+        return messageDAO.getMessageByID(message_id);
     }
 
     public List<Message> getAllMessageByAccountID(int posted_by) {
@@ -42,13 +43,12 @@ public class MessageService {
         return messageDAO.getMessageByID(message_id);
     }
 
-    public boolean deleteMessageByID(Message message) {
-        boolean deletedMessage = messageDAO.deleteMessage(message);
-        if (deletedMessage == false) {
-            return false;
+    public Message deleteMessageByID(int message_id) {
+        Message deletedMessage = messageDAO.getMessageByID(message_id);
+        if (deletedMessage == null) {
+            return null;
         }
-        else {
-            return true;
-        }
+        messageDAO.deleteMessage(message_id);
+        return deletedMessage;
     }
 }

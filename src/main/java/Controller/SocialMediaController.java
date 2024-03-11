@@ -37,8 +37,8 @@ public class SocialMediaController {
         app.post("/login", this::postLogInHandler); //done
         app.get("/messages", this::getAllMessagesHandler); //done
         app.post("/messages", this::postAddMessageHandler); //done
-        app.patch("/messages/{message_id}", this::patchUpdateMessageHandler); //in progress
-        app.delete("/messages/{message_id}", this::deleteMessageHandler);
+        app.patch("/messages/{message_id}", this::patchUpdateMessageHandler); //done
+        app.delete("/messages/{message_id}", this::deleteMessageHandler); //done
         app.get("/messages/{message_id}", this::getIndividualMessageHandler); //done
         app.get("/accounts/{account_id}/messages", this::getAllMessagesFromAnAccount); //done
         return app;
@@ -76,8 +76,10 @@ public class SocialMediaController {
     private void patchUpdateMessageHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Message message = mapper.readValue(context.body(), Message.class);
-        if (messageService.updateMessage(message)) {
-            context.status(200).json(message);
+        int message_id = Integer.parseInt(context.pathParam("message_id"));
+        Message updatedMessage = messageService.updateMessageByID(message_id, message);
+        if (updatedMessage != null) {
+            context.status(200).json(updatedMessage);
         }
         else {
             context.status(400);
@@ -121,13 +123,13 @@ public class SocialMediaController {
      * @param context The Javalin Context object manages information about both the HTTP request and response.
      */
     private void deleteMessageHandler(Context context) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        Message message = mapper.readValue(context.body(), Message.class);
-        if (messageService.deleteMessageByID(message)) {
-            context.status(200);
+        int message_id = Integer.parseInt(context.pathParam("message_id"));
+        Message deletedMessage = messageService.deleteMessageByID(message_id);
+        if (deletedMessage != null) {
+            context.status(200).json(deletedMessage);
         }
         else {
-            context.status(200).json(message);
+            context.status(200);
         }
     }
 
