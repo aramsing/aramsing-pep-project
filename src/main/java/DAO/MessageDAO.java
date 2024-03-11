@@ -20,7 +20,7 @@ import Util.ConnectionUtil;
  */
 public class MessageDAO {
     /*
-     * Retrieve all messages from the message table
+     * Retrieve all messages through the database
      */
     public List<Message> getAllMessages() {
         Connection connection = ConnectionUtil.getConnection();
@@ -51,7 +51,7 @@ public class MessageDAO {
     }
 
     /*
-     * Retrieve an individual message by its id
+     * Retrieve an individual message by its id through the database
      */
     public Message getMessageByID(int message_id) {
         Connection connection = ConnectionUtil.getConnection();
@@ -85,7 +85,7 @@ public class MessageDAO {
     }
 
     /*
-     * Get all messages by account id
+     * Get all messages by account id through the database
      */
     public List<Message> getAllMessageByAccountID(int posted_by) {
         Connection connection = ConnectionUtil.getConnection();
@@ -118,7 +118,7 @@ public class MessageDAO {
     }
 
     /*
-     * Create a new message here
+     * Create a new message here through the database
      */
     public Message insertMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection();
@@ -149,9 +149,9 @@ public class MessageDAO {
     }
 
     /*
-     * Update a message here
+     * Update a message by its ID through the database
      */
-    public void updateMessage(int message_id, Message message) {
+    public void updateMessageByID(int message_id, Message message) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {
@@ -172,9 +172,9 @@ public class MessageDAO {
     }
 
     /*
-     * Delete a message here
+     * Delete a message by its ID through the database
      */
-    public void deleteMessage(int message_id) {
+    public void deleteMessageByID(int message_id) {
         Connection connection = ConnectionUtil.getConnection();
 
         try {

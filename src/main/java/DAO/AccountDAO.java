@@ -17,8 +17,7 @@ import Util.ConnectionUtil;
  */
 public class AccountDAO {
     /*
-     * Select an account from the account table
-     * Log in to an account in our demo social media
+     * Log in to an account in our demo social media through the database
      */
     public Account logInAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection(); // creates a connection to the database
@@ -50,8 +49,7 @@ public class AccountDAO {
     }
 
     /*
-     * Insert an account into the account table
-     * Create an account in our demo social media
+     * Create an account in our demo social media through the database
      */
     public Account insertAccount(Account account) {
         Connection connection = ConnectionUtil.getConnection(); // creates a connection to the database
