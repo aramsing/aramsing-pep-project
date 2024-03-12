@@ -30,8 +30,9 @@ public class MessageDAO {
             // SQL logic
             String sql = "SELECT * FROM message;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            ResultSet resultSet = preparedStatement.executeQuery();
 
+            // Result Set logic
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Message message = new Message(
                     resultSet.getInt("message_id"),
@@ -44,7 +45,7 @@ public class MessageDAO {
         }
         
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return messages;
@@ -64,7 +65,7 @@ public class MessageDAO {
             // prepared statement set logic if any
             preparedStatement.setInt(1, message_id);
 
-            // result set logic
+            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
                 Message message = new Message(
@@ -78,7 +79,7 @@ public class MessageDAO {
         }
 
         catch(SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
         
         return null;
@@ -98,6 +99,8 @@ public class MessageDAO {
 
             // prepared statement logic here
             preparedStatement.setInt(1, posted_by);
+
+            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()) {
                 Message message = new Message(
@@ -111,7 +114,7 @@ public class MessageDAO {
         }
         
         catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return messages;
@@ -134,15 +137,22 @@ public class MessageDAO {
             preparedStatement.setLong(3, message.getTime_posted_epoch());
 
             preparedStatement.executeUpdate();
+
+            // Result Set logic
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 int generatedMessageID = (int) resultSet.getLong(1);
-                return new Message(generatedMessageID, message.getPosted_by(), message.getMessage_text(), message.getTime_posted_epoch());
+                return new Message(
+                    generatedMessageID,
+                    message.getPosted_by(),
+                    message.getMessage_text(),
+                    message.getTime_posted_epoch()
+                );
             }
         }
         
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
         }
 
         return null;

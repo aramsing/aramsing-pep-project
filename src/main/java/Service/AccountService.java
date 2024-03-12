@@ -26,7 +26,7 @@ public class AccountService {
      * Go between from the back to front end
      */
     public Account logInAccount(Account account) {
-        return accountDAO.logInAccount(account);
+        return accountDAO.logInAccount(account); // returns the logged in account from the database
     }
 
     /*
@@ -34,9 +34,9 @@ public class AccountService {
      * Go between from the back to front end
      */
     public Account addAccount(Account account) {
-        if ((account.getUsername() == "") || (account.getPassword().length() < 4)) {
+        if ((account.getUsername() == "") || (account.getPassword().length() < 4)) { // if the account username is blank and the password is less than four characters, return null
             return null;
         }
-        return accountDAO.insertAccount(account);
+        return accountDAO.insertAccount(account); // returns the newly created account from the database
     }
 }

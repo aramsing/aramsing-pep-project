@@ -29,8 +29,9 @@ public class AccountDAO {
             // set string method, the user input starts at index 1 instead of 0
             preparedStatement.setString(1, account.getUsername());
             preparedStatement.setString(2, account.getPassword());
+
+            // Result Set logic
             ResultSet resultSet = preparedStatement.executeQuery();
-            
             while(resultSet.next()) {
                 Account accounts = new Account(
                     resultSet.getInt("account_id"),
@@ -65,11 +66,16 @@ public class AccountDAO {
 
             // SQL execution
             preparedStatement.executeUpdate();
-            ResultSet resultSet = preparedStatement.getGeneratedKeys();
 
+            // Result Set logic
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
                 int generatedAccountId = resultSet.getInt(1);
-                return new Account(generatedAccountId, account.getUsername(), account.getPassword());
+                return new Account(
+                    generatedAccountId,
+                    account.getUsername(),
+                    account.getPassword()
+                );
             }
         }
 
